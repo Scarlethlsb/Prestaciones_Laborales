@@ -5,77 +5,470 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Calculadora de Prestaciones Laborales - El Salvador</title>
     <style>
-      :root{--ink:#102033;--muted:#68778a;--navy:#102a43;--blue:#1677ff;--cyan:#10b7c9;--teal:#13a889;--line:#dce5ef}
-      *{box-sizing:border-box}
-      body{margin:0;font-family:Inter,system-ui,-apple-system,"Segoe UI",Arial,sans-serif;color:var(--ink);background:linear-gradient(120deg,#eef5ff,#f7fbff 45%,#e9fbf8 75%,#f7f1ff);min-height:100vh}
-      .container{width:min(1240px,92%);margin:auto}
-      header{padding:28px 0 22px}
-      .hero{background:linear-gradient(125deg,#071d32,#123b5d,#087b83);border-radius:26px;padding:34px 40px;color:#fff;box-shadow:0 22px 60px rgba(13,36,56,.25)}
-      .brand{display:flex;align-items:center;gap:15px}
-      .brand-mark{width:52px;height:52px;border-radius:16px;background:linear-gradient(145deg,#38d6c0,#1677ff,#8b5cf6);display:grid;place-items:center;font-size:25px}
-      h1{font-size:28px;margin:0;font-weight:850;letter-spacing:-.6px}
-      .subtitle{margin:7px 0 0;color:rgba(255,255,255,.78);font-size:13px;line-height:1.5}
-      main{display:grid;grid-template-columns:minmax(0,1.5fr) minmax(330px,.8fr);gap:22px;align-items:start;padding-bottom:30px}
-      main.no-results{grid-template-columns:minmax(0,1040px);justify-content:center}
-      .card{background:rgba(255,255,255,.95);border:1px solid #d2dde9;border-radius:20px;box-shadow:0 14px 36px rgba(24,55,87,.09);padding:22px;margin-bottom:16px;position:relative;overflow:hidden}
-      .card:before{content:"";position:absolute;left:0;top:0;bottom:0;width:5px;background:linear-gradient(180deg,#1677ff,#10b7c9,#8b5cf6)}
-      .card-title{font-size:17px;margin:0 0 15px;font-weight:850}
-      .grid-4{display:grid;grid-template-columns:repeat(4,1fr);gap:14px}
-      .grid-3{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
-      .grid-2{display:grid;grid-template-columns:1fr 1fr;gap:14px}
-      .field label{display:block;font-size:12px;font-weight:800;margin:0 0 7px;color:#334e68}
-      input[type="text"],input[type="number"],input[type="date"],input[type="time"],select{width:100%;height:44px;border:1px solid #d6e0eb;border-radius:12px;background:#fafdff;padding:0 12px;font-size:14px;color:#172b3a;outline:none}
-      input:focus,select:focus{border-color:var(--blue);box-shadow:0 0 0 4px rgba(22,119,255,.1)}
-      input:disabled{opacity:.5}
-      .small-note{margin-top:9px;font-size:11px;color:var(--muted);line-height:1.55}
-      .service{margin-top:13px;padding:10px 12px;background:#f0f8ff;border:1px dashed #bdd8f5;border-radius:11px;font-size:12px;font-weight:800;color:#28547a}
-      .cause{display:grid;grid-template-columns:1fr 1fr;gap:12px}
-      .cause label,.checkline{border:1px solid #d5e0ea;border-radius:14px;min-height:50px;padding:10px 14px;display:flex;align-items:center;gap:10px;cursor:pointer;font-size:13px;font-weight:800;background:#fff}
-      .cause label{justify-content:center}
-      .cause label:has(input:checked){background:linear-gradient(110deg,#1677ff,#10b7c9,#8b5cf6);color:#fff;border-color:transparent}
-      .checkline{font-size:12px}
-      .checkline:has(input:checked){background:#eef9ff;border-color:#9fcbec}
-      input[type="checkbox"],input[type="radio"]{width:18px;height:18px;margin:0;accent-color:#1677ff;flex:none}
-      .conditional{margin-top:12px}
-      .hidden{display:none!important}
-      .holidays{display:grid;grid-template-columns:repeat(2,1fr);gap:8px;margin-top:12px}
-      .holidays .checkline{min-height:42px;padding:8px 12px;font-weight:700}
-      .list-table{width:100%;border-collapse:collapse;margin-top:12px}
-      .list-table th,.list-table td{border-bottom:1px solid #e8eef4;padding:7px;font-size:11px;text-align:left}
-      .list-table th{background:#f1f6fa;color:#40566c}
-      .list-table input{height:36px;font-size:12px;padding:0 8px}
-      .tsel{display:flex;gap:4px;align-items:center}
-      .tsel select{height:36px;width:auto;padding:0 4px;font-size:12px;border-radius:9px}
-      .btn-mini{height:34px;padding:0 12px;border:1px solid #d7e0e9;border-radius:9px;background:#fff;font-weight:800;cursor:pointer;color:#40566c}
-      .actions{display:grid;grid-template-columns:1.2fr 1fr 1fr .8fr;gap:10px;margin:18px 0 4px}
-      button{border:0;border-radius:12px;height:46px;padding:0 15px;font-weight:850;cursor:pointer;font-size:12px}
-      button:disabled{opacity:.45;cursor:not-allowed}
-      .btn-primary{background:linear-gradient(100deg,#1677ff,#10b7c9,#8b5cf6);color:#fff}
-      .btn-pdf{background:#eef8f7;color:#087b68;border:1px solid #c9ebe4}
-      .btn-sign{background:#fff4e7;color:#a45a00;border:1px solid #f3d7aa}
-      .btn-clear{background:#f1f4f7;color:#526579;border:1px solid #dce4ec}
-      .error{display:none;margin-top:12px;padding:11px 13px;border-radius:11px;background:#fff1f3;border:1px solid #f3c1ca;color:#a42d43;font-size:12px}
-      .warning{margin-top:10px;background:#fff8eb;border:1px solid #f4dfad;color:#805d13;padding:11px;border-radius:12px;font-size:11px;line-height:1.55}
-      .blocked{background:#fff1f3;border-color:#f3c1ca;color:#a42d43}
-      .results{display:none;position:sticky;top:18px;padding:0}
-      .results:before{display:none}
-      .results-head{padding:22px 24px 18px;background:linear-gradient(145deg,#102a43,#174d69);color:#fff}
-      .results h2{font-size:21px;margin:0 0 5px}
-      .results-sub{font-size:11px;color:rgba(255,255,255,.72);margin:0}
-      .results-body{padding:16px 22px 22px}
-      .result-row{display:flex;justify-content:space-between;gap:15px;padding:10px 0;border-bottom:1px solid #edf1f5;font-size:12px}
-      .result-row span:first-child{color:#647589}
-      .result-row b{white-space:nowrap}
-      .sect{margin:14px 0 2px;font-size:10px;font-weight:900;letter-spacing:.5px;color:#087b68;text-transform:uppercase}
-      .neg b{color:#a42d43}
-      .total{margin-top:12px;border-radius:15px;padding:15px 16px;background:#f1f6fa;border:1px solid #dce5ef;display:flex;justify-content:space-between;align-items:center;font-size:13px}
-      .total.net{background:linear-gradient(135deg,#eafbf6,#eff9ff);border-color:#c9ebe3}
-      .total strong{font-size:22px;color:#087b68}
-      .info,.formula{margin-bottom:12px;background:#f5f8fb;border:1px solid #e0e8ef;border-radius:13px;padding:12px;font-size:10.5px;line-height:1.6;color:#53687c}
-      .footer{padding:10px 0 34px;color:#6c7d90;font-size:10px;line-height:1.6}
-      @media (max-width:1050px){main,main.no-results{grid-template-columns:1fr}.results{position:relative;top:auto}.grid-4{grid-template-columns:1fr 1fr}}
-      @media (max-width:700px){.grid-4,.grid-3,.grid-2,.cause,.actions,.holidays{grid-template-columns:1fr}.hero{padding:24px 20px}h1{font-size:23px}}
-      @media print{body{background:#fff}.no-print,form{display:none!important}.results{display:block!important;position:static}main{display:block}}
+      :root {
+        --ink: #102033;
+        --muted: #68778a;
+        --navy: #102a43;
+        --blue: #1677ff;
+        --cyan: #10b7c9;
+        --teal: #13a889;
+        --line: #dce5ef;
+      }
+      * {
+        box-sizing: border-box;
+      }
+      body {
+        margin: 0;
+        font-family:
+          Inter,
+          system-ui,
+          -apple-system,
+          "Segoe UI",
+          Arial,
+          sans-serif;
+        color: var(--ink);
+        background: linear-gradient(
+          120deg,
+          #eef5ff,
+          #f7fbff 45%,
+          #e9fbf8 75%,
+          #f7f1ff
+        );
+        min-height: 100vh;
+      }
+      .container {
+        width: min(1240px, 92%);
+        margin: auto;
+      }
+      header {
+        padding: 28px 0 22px;
+      }
+      .hero {
+        background: linear-gradient(125deg, #071d32, #123b5d, #087b83);
+        border-radius: 26px;
+        padding: 34px 40px;
+        color: #fff;
+        box-shadow: 0 22px 60px rgba(13, 36, 56, 0.25);
+      }
+      .brand {
+        display: flex;
+        align-items: center;
+        gap: 15px;
+      }
+      .brand-mark {
+        width: 52px;
+        height: 52px;
+        border-radius: 16px;
+        background: linear-gradient(145deg, #38d6c0, #1677ff, #8b5cf6);
+        display: grid;
+        place-items: center;
+        font-size: 25px;
+      }
+      h1 {
+        font-size: 28px;
+        margin: 0;
+        font-weight: 850;
+        letter-spacing: -0.6px;
+      }
+      .subtitle {
+        margin: 7px 0 0;
+        color: rgba(255, 255, 255, 0.78);
+        font-size: 13px;
+        line-height: 1.5;
+      }
+      main {
+        display: grid;
+        grid-template-columns: minmax(0, 1.5fr) minmax(330px, 0.8fr);
+        gap: 22px;
+        align-items: start;
+        padding-bottom: 30px;
+      }
+      main.no-results {
+        grid-template-columns: minmax(0, 1040px);
+        justify-content: center;
+      }
+      .card {
+        background: rgba(255, 255, 255, 0.95);
+        border: 1px solid #d2dde9;
+        border-radius: 20px;
+        box-shadow: 0 14px 36px rgba(24, 55, 87, 0.09);
+        padding: 22px;
+        margin-bottom: 16px;
+        position: relative;
+        overflow: hidden;
+      }
+      .card:before {
+        content: "";
+        position: absolute;
+        left: 0;
+        top: 0;
+        bottom: 0;
+        width: 5px;
+        background: linear-gradient(180deg, #1677ff, #10b7c9, #8b5cf6);
+      }
+      .card-title {
+        font-size: 17px;
+        margin: 0 0 15px;
+        font-weight: 850;
+      }
+      .grid-4 {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 14px;
+      }
+      .grid-3 {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 14px;
+      }
+      .grid-2 {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 14px;
+      }
+      .field label {
+        display: block;
+        font-size: 12px;
+        font-weight: 800;
+        margin: 0 0 7px;
+        color: #334e68;
+      }
+      input[type="text"],
+      input[type="number"],
+      input[type="date"],
+      input[type="time"],
+      select {
+        width: 100%;
+        height: 44px;
+        border: 1px solid #d6e0eb;
+        border-radius: 12px;
+        background: #fafdff;
+        padding: 0 12px;
+        font-size: 14px;
+        color: #172b3a;
+        outline: none;
+      }
+      input:focus,
+      select:focus {
+        border-color: var(--blue);
+        box-shadow: 0 0 0 4px rgba(22, 119, 255, 0.1);
+      }
+      input:disabled {
+        opacity: 0.5;
+      }
+      .small-note {
+        margin-top: 9px;
+        font-size: 11px;
+        color: var(--muted);
+        line-height: 1.55;
+      }
+      .service {
+        margin-top: 13px;
+        padding: 10px 12px;
+        background: #f0f8ff;
+        border: 1px dashed #bdd8f5;
+        border-radius: 11px;
+        font-size: 12px;
+        font-weight: 800;
+        color: #28547a;
+      }
+      .cause {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 12px;
+      }
+      .cause label,
+      .checkline {
+        border: 1px solid #d5e0ea;
+        border-radius: 14px;
+        min-height: 50px;
+        padding: 10px 14px;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        cursor: pointer;
+        font-size: 13px;
+        font-weight: 800;
+        background: #fff;
+      }
+      .cause label {
+        justify-content: center;
+      }
+      .cause label:has(input:checked) {
+        background: linear-gradient(110deg, #1677ff, #10b7c9, #8b5cf6);
+        color: #fff;
+        border-color: transparent;
+      }
+      .checkline {
+        font-size: 12px;
+      }
+      .checkline:has(input:checked) {
+        background: #eef9ff;
+        border-color: #9fcbec;
+      }
+      input[type="checkbox"],
+      input[type="radio"] {
+        width: 18px;
+        height: 18px;
+        margin: 0;
+        accent-color: #1677ff;
+        flex: none;
+      }
+      .conditional {
+        margin-top: 12px;
+      }
+      .hidden {
+        display: none !important;
+      }
+      .holidays {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 8px;
+        margin-top: 12px;
+      }
+      .holidays .checkline {
+        min-height: 42px;
+        padding: 8px 12px;
+        font-weight: 700;
+      }
+      .list-table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 12px;
+      }
+      .list-table th,
+      .list-table td {
+        border-bottom: 1px solid #e8eef4;
+        padding: 7px;
+        font-size: 11px;
+        text-align: left;
+      }
+      .list-table th {
+        background: #f1f6fa;
+        color: #40566c;
+      }
+      .list-table input {
+        height: 36px;
+        font-size: 12px;
+        padding: 0 8px;
+      }
+      .tsel {
+        display: flex;
+        gap: 4px;
+        align-items: center;
+      }
+      .tsel select {
+        height: 36px;
+        width: auto;
+        padding: 0 4px;
+        font-size: 12px;
+        border-radius: 9px;
+      }
+      .btn-mini {
+        height: 34px;
+        padding: 0 12px;
+        border: 1px solid #d7e0e9;
+        border-radius: 9px;
+        background: #fff;
+        font-weight: 800;
+        cursor: pointer;
+        color: #40566c;
+      }
+      .actions {
+        display: grid;
+        grid-template-columns: 1.2fr 1fr 1fr 0.8fr;
+        gap: 10px;
+        margin: 18px 0 4px;
+      }
+      button {
+        border: 0;
+        border-radius: 12px;
+        height: 46px;
+        padding: 0 15px;
+        font-weight: 850;
+        cursor: pointer;
+        font-size: 12px;
+      }
+      button:disabled {
+        opacity: 0.45;
+        cursor: not-allowed;
+      }
+      .btn-primary {
+        background: linear-gradient(100deg, #1677ff, #10b7c9, #8b5cf6);
+        color: #fff;
+      }
+      .btn-pdf {
+        background: #eef8f7;
+        color: #087b68;
+        border: 1px solid #c9ebe4;
+      }
+      .btn-sign {
+        background: #fff4e7;
+        color: #a45a00;
+        border: 1px solid #f3d7aa;
+      }
+      .btn-clear {
+        background: #f1f4f7;
+        color: #526579;
+        border: 1px solid #dce4ec;
+      }
+      .error {
+        display: none;
+        margin-top: 12px;
+        padding: 11px 13px;
+        border-radius: 11px;
+        background: #fff1f3;
+        border: 1px solid #f3c1ca;
+        color: #a42d43;
+        font-size: 12px;
+      }
+      .warning {
+        margin-top: 10px;
+        background: #fff8eb;
+        border: 1px solid #f4dfad;
+        color: #805d13;
+        padding: 11px;
+        border-radius: 12px;
+        font-size: 11px;
+        line-height: 1.55;
+      }
+      .blocked {
+        background: #fff1f3;
+        border-color: #f3c1ca;
+        color: #a42d43;
+      }
+      .results {
+        display: none;
+        position: sticky;
+        top: 18px;
+        padding: 0;
+      }
+      .results:before {
+        display: none;
+      }
+      .results-head {
+        padding: 22px 24px 18px;
+        background: linear-gradient(145deg, #102a43, #174d69);
+        color: #fff;
+      }
+      .results h2 {
+        font-size: 21px;
+        margin: 0 0 5px;
+      }
+      .results-sub {
+        font-size: 11px;
+        color: rgba(255, 255, 255, 0.72);
+        margin: 0;
+      }
+      .results-body {
+        padding: 16px 22px 22px;
+      }
+      .result-row {
+        display: flex;
+        justify-content: space-between;
+        gap: 15px;
+        padding: 10px 0;
+        border-bottom: 1px solid #edf1f5;
+        font-size: 12px;
+      }
+      .result-row span:first-child {
+        color: #647589;
+      }
+      .result-row b {
+        white-space: nowrap;
+      }
+      .sect {
+        margin: 14px 0 2px;
+        font-size: 10px;
+        font-weight: 900;
+        letter-spacing: 0.5px;
+        color: #087b68;
+        text-transform: uppercase;
+      }
+      .neg b {
+        color: #a42d43;
+      }
+      .total {
+        margin-top: 12px;
+        border-radius: 15px;
+        padding: 15px 16px;
+        background: #f1f6fa;
+        border: 1px solid #dce5ef;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        font-size: 13px;
+      }
+      .total.net {
+        background: linear-gradient(135deg, #eafbf6, #eff9ff);
+        border-color: #c9ebe3;
+      }
+      .total strong {
+        font-size: 22px;
+        color: #087b68;
+      }
+      .info,
+      .formula {
+        margin-bottom: 12px;
+        background: #f5f8fb;
+        border: 1px solid #e0e8ef;
+        border-radius: 13px;
+        padding: 12px;
+        font-size: 10.5px;
+        line-height: 1.6;
+        color: #53687c;
+      }
+      .footer {
+        padding: 10px 0 34px;
+        color: #6c7d90;
+        font-size: 10px;
+        line-height: 1.6;
+      }
+      @media (max-width: 1050px) {
+        main,
+        main.no-results {
+          grid-template-columns: 1fr;
+        }
+        .results {
+          position: relative;
+          top: auto;
+        }
+        .grid-4 {
+          grid-template-columns: 1fr 1fr;
+        }
+      }
+      @media (max-width: 700px) {
+        .grid-4,
+        .grid-3,
+        .grid-2,
+        .cause,
+        .actions,
+        .holidays {
+          grid-template-columns: 1fr;
+        }
+        .hero {
+          padding: 24px 20px;
+        }
+        h1 {
+          font-size: 23px;
+        }
+      }
+      @media print {
+        body {
+          background: #fff;
+        }
+        .no-print,
+        form {
+          display: none !important;
+        }
+        .results {
+          display: block !important;
+          position: static;
+        }
+        main {
+          display: block;
+        }
+      }
     </style>
   </head>
   <body>
@@ -86,7 +479,11 @@
             <div class="brand-mark">⚖️</div>
             <div>
               <h1>Cálculo de Prestaciones Laborales</h1>
-              <p class="subtitle">Cálculo estimado · El Salvador · Código de Trabajo, Ley Reguladora de la Prestación Económica por Renuncia Voluntaria y retenciones de ley (ISSS, AFP, ISR)</p>
+              <p class="subtitle">
+                Cálculo estimado · El Salvador · Código de Trabajo, Ley
+                Reguladora de la Prestación Económica por Renuncia Voluntaria y
+                retenciones de ley (ISSS, AFP, ISR)
+              </p>
             </div>
           </div>
         </div>
@@ -98,37 +495,92 @@
         <section class="card">
           <h2 class="card-title">Datos del trabajador</h2>
           <div class="grid-4">
-            <div class="field"><label>Nombre completo</label><input id="name" type="text" placeholder="Ej. Roberto Aguilar Bonilla" /></div>
-            <div class="field"><label>Cargo desempeñado</label><input id="job" type="text" placeholder="Ej. Ingeniero de software" /></div>
+            <div class="field">
+              <label>Nombre completo</label
+              ><input
+                id="name"
+                type="text"
+                placeholder="Ej. Roberto Aguilar Bonilla"
+              />
+            </div>
+            <div class="field">
+              <label>Cargo desempeñado</label
+              ><input
+                id="job"
+                type="text"
+                placeholder="Ej. Ingeniero de software"
+              />
+            </div>
             <div class="field">
               <label>Sector económico</label>
               <select id="sector">
                 <option value="408.80">Comercio y servicios ($408.80)</option>
                 <option value="408.80">Industria ($408.80)</option>
-                <option value="402.32">Maquila textil y confección ($402.32)</option>
-                <option value="305.23">Beneficio de café / recolección de caña ($305.23)</option>
-                <option value="272.53">Agropecuario, pesca y otras actividades agrícolas ($272.53)</option>
+                <option value="402.32">
+                  Maquila textil y confección ($402.32)
+                </option>
+                <option value="305.23">
+                  Beneficio de café / recolección de caña ($305.23)
+                </option>
+                <option value="272.53">
+                  Agropecuario, pesca y otras actividades agrícolas ($272.53)
+                </option>
               </select>
             </div>
-            <div class="field"><label>Nombre del patrono / empresa</label><input id="employer" type="text" placeholder="Ej. SOLVEXIA S.A.S DE C.V" /></div>
+            <div class="field">
+              <label>Nombre del patrono / empresa</label
+              ><input
+                id="employer"
+                type="text"
+                placeholder="Ej. SOLVEXIA S.A.S DE C.V"
+              />
+            </div>
           </div>
         </section>
 
         <section class="card">
           <h2 class="card-title">Datos financieros y antigüedad</h2>
           <div class="grid-3">
-            <div class="field"><label>Salario mensual (USD)</label><input id="salary" type="number" min="0.01" step="0.01" placeholder="408.80" required /></div>
-            <div class="field"><label>Fecha de inicio laboral</label><input id="start" type="date" required /></div>
-            <div class="field"><label>Fecha de finalización</label><input id="end" type="date" required /></div>
+            <div class="field">
+              <label>Salario mensual (USD)</label
+              ><input
+                id="salary"
+                type="number"
+                min="0.01"
+                step="0.01"
+                placeholder="408.80"
+                required
+              />
+            </div>
+            <div class="field">
+              <label>Fecha de inicio laboral</label
+              ><input id="start" type="date" required />
+            </div>
+            <div class="field">
+              <label>Fecha de finalización</label
+              ><input id="end" type="date" required />
+              <div id="endNote" class="small-note hidden">
+                Bloqueada: en despido injustificado se toma la fecha de hoy.
+                Cambie la causa a renuncia voluntaria para elegir otra fecha.
+              </div>
+            </div>
           </div>
-          <div id="service" class="service">Antigüedad total: — (completa las dos fechas)</div>
+          <div id="service" class="service">
+            Antigüedad total: — (completa las dos fechas)
+          </div>
         </section>
 
         <section class="card">
           <h2 class="card-title">Causa de finalización</h2>
           <div class="cause">
-            <label><input type="radio" name="cause" value="despido" checked /> Despido injustificado</label>
-            <label><input type="radio" name="cause" value="renuncia" /> Renuncia voluntaria</label>
+            <label
+              ><input type="radio" name="cause" value="despido" checked />
+              Despido injustificado</label
+            >
+            <label
+              ><input type="radio" name="cause" value="renuncia" /> Renuncia
+              voluntaria</label
+            >
           </div>
           <div id="renunciaExtra" class="conditional hidden">
             <div class="field">
@@ -139,76 +591,163 @@
                 <option value="no">No</option>
               </select>
             </div>
-            <div id="noticeMsg" class="warning">Requisitos (Ley Reguladora, Arts. 2 y 4): preaviso por escrito de 15 días (30 días si es cargo de dirección, jefatura o trabajador especializado), copia del DUI y mínimo 2 años de servicio continuo.</div>
+            <div id="noticeMsg" class="warning">
+              Requisitos (Ley Reguladora, Arts. 2 y 4): preaviso por escrito de
+              15 días (30 días si es cargo de dirección, jefatura o trabajador
+              especializado), copia del DUI y mínimo 2 años de servicio
+              continuo.
+            </div>
           </div>
         </section>
 
         <section class="card">
           <h2 class="card-title">Vacaciones</h2>
-          <label class="checkline"><input id="noVacation" type="checkbox" /> No ha tomado vacaciones en este período</label>
+          <label class="checkline"
+            ><input id="noVacation" type="checkbox" /> No ha tomado vacaciones
+            en este período</label
+          >
           <div class="grid-2 conditional">
-            <div class="field"><label>Inicio de sus últimas vacaciones</label><input id="vacStart" type="date" /></div>
-            <div class="field"><label>Fin de sus últimas vacaciones</label><input id="vacEnd" type="date" /></div>
+            <div class="field">
+              <label>Inicio de sus últimas vacaciones</label
+              ><input id="vacStart" type="date" />
+            </div>
+            <div class="field">
+              <label>Fin de sus últimas vacaciones</label
+              ><input id="vacEnd" type="date" />
+            </div>
           </div>
-          <div class="small-note">Si no marca la casilla, indique las fechas de sus últimas vacaciones para determinar el período proporcional.</div>
+          <div class="small-note">
+            Si no marca la casilla, indique las fechas de sus últimas vacaciones
+            para determinar el período proporcional.
+          </div>
         </section>
 
         <section class="card">
           <h2 class="card-title">Aguinaldo</h2>
           <div class="grid-2">
-            <div class="field"><label>Fecha del último aguinaldo pagado (opcional)</label><input id="bonusDate" type="date" /></div>
-            <div class="field"><label>Días de aguinaldo según antigüedad</label><input id="bonusDays" type="number" readonly /></div>
+            <div class="field">
+              <label>Fecha del último aguinaldo pagado (opcional)</label
+              ><input id="bonusDate" type="date" />
+            </div>
+            <div class="field">
+              <label>Días de aguinaldo según antigüedad</label
+              ><input id="bonusDays" type="number" readonly />
+            </div>
           </div>
           <div id="bonusMsg" class="small-note">
-            Desde la reforma (Arts. 197, 200 y 202 C.T.) el aguinaldo puede pagarse desde el <b>1 de octubre</b> hasta el 20 de diciembre; el 12 de diciembre es la fecha de referencia del cómputo proporcional. Si el despido ocurre <b>antes del 1 de octubre</b> se paga proporcional; <b>desde el 1 de octubre</b> se paga completo (si ya tiene un año de servicio al 12 de diciembre). Los días de aguinaldo (15, 19 o 21) se determinan con los años de servicio cumplidos al 12 de diciembre cuando el pago es completo.
+            Desde la reforma (Arts. 197, 200 y 202 C.T.) el aguinaldo puede
+            pagarse desde el <b>1 de octubre</b> hasta el 20 de diciembre; el 12
+            de diciembre es la fecha de referencia del cómputo proporcional. Si
+            el despido ocurre <b>antes del 1 de octubre</b> se paga
+            proporcional; <b>desde el 1 de octubre</b> se paga completo (si ya
+            tiene un año de servicio al 12 de diciembre). Los días de aguinaldo
+            (15, 19 o 21) se determinan con los años de servicio cumplidos al 12
+            de diciembre cuando el pago es completo.
           </div>
         </section>
 
         <section class="card">
           <h2 class="card-title">Horas extras no pagadas</h2>
-          <label class="checkline"><input id="noOT" type="checkbox" checked /> No tengo horas extras no pagadas</label>
+          <label class="checkline"
+            ><input id="noOT" type="checkbox" checked /> No tengo horas extras
+            no pagadas</label
+          >
           <div id="otArea" class="conditional hidden">
             <div class="small-note">
-              Ingrese solo fecha, hora de inicio y hora de fin en formato de 12 horas (a. m., m. = mediodía, p. m.), por ejemplo 8:00 p. m. a 12:00 a. m. Las 12 de la noche se pueden elegir como 12 a. m. o 12 p. m.; el mediodía (12:00 del día) se elige con <b>m.</b>. El sistema clasifica automáticamente: <b>diurna</b> de 6:00 a. m. a 7:00 p. m. y <b>nocturna</b> de 7:00 p. m. a 6:00 a. m.; si la jornada mezcla ambas franjas y tiene <b>3.5 horas nocturnas o más</b>, toda se considera nocturna (jornada mixta); si tiene menos de 3.5, cada tramo se paga según su franja.
+              Ingrese solo fecha, hora de inicio y hora de fin en formato de 12
+              horas (a. m., m. = mediodía, p. m.), por ejemplo 8:00 p. m. a
+              12:00 a. m. Las 12 de la noche se pueden elegir como 12 a. m. o 12
+              p. m.; el mediodía (12:00 del día) se elige con <b>m.</b>. El
+              sistema clasifica automáticamente: <b>diurna</b> de 6:00 a. m. a
+              7:00 p. m. y <b>nocturna</b> de 7:00 p. m. a 6:00 a. m.; si la
+              jornada mezcla ambas franjas y tiene
+              <b>3.5 horas nocturnas o más</b>, toda se considera nocturna
+              (jornada mixta); si tiene menos de 3.5, cada tramo se paga según
+              su franja.
             </div>
-            <div style="overflow:auto">
+            <div style="overflow: auto">
               <table class="list-table">
-                <thead><tr><th>Fecha</th><th>Hora inicio (12 h)</th><th>Hora fin (12 h)</th><th>Clasificación automática</th><th></th></tr></thead>
+                <thead>
+                  <tr>
+                    <th>Fecha</th>
+                    <th>Hora inicio (12 h)</th>
+                    <th>Hora fin (12 h)</th>
+                    <th>Clasificación automática</th>
+                    <th></th>
+                  </tr>
+                </thead>
                 <tbody id="otRows"></tbody>
               </table>
             </div>
-            <button type="button" class="btn-mini" id="addOT" style="margin-top:9px">+ Agregar jornada</button>
-            <div class="small-note">Total diurnas: <b id="otDay">0.00 h</b> · Total nocturnas: <b id="otNight">0.00 h</b><br />Diurna: 100% de recargo (×2). Nocturna: ×2 y además +25% de nocturnidad.</div>
+            <button
+              type="button"
+              class="btn-mini"
+              id="addOT"
+              style="margin-top: 9px"
+            >
+              + Agregar jornada
+            </button>
+            <div class="small-note">
+              Total diurnas: <b id="otDay">0.00 h</b> · Total nocturnas:
+              <b id="otNight">0.00 h</b><br />Diurna: 100% de recargo (×2).
+              Nocturna: ×2 y además +25% de nocturnidad.
+            </div>
           </div>
         </section>
 
         <section class="card">
           <h2 class="card-title">Días de asueto laborados</h2>
-          <label class="checkline"><input id="noHoliday" type="checkbox" checked /> No laboré días de asueto</label>
+          <label class="checkline"
+            ><input id="noHoliday" type="checkbox" checked /> No laboré días de
+            asueto</label
+          >
           <div id="holidayArea" class="conditional hidden">
-            <div class="small-note">Seleccione los asuetos que laboró (Código de Trabajo, Art. 190).</div>
+            <div class="small-note">
+              Seleccione los asuetos que laboró (Código de Trabajo, Art. 190).
+            </div>
             <div class="holidays" id="holidayList"></div>
-            <div class="small-note">Asuetos seleccionados: <b id="holCount">0</b></div>
+            <div class="small-note">
+              Asuetos seleccionados: <b id="holCount">0</b>
+            </div>
           </div>
         </section>
 
         <section class="card">
           <h2 class="card-title">Días de descanso semanal laborados</h2>
           <div class="grid-2">
-            <div class="field"><label>Cantidad de días</label><input id="restDays" type="number" min="0" step="1" value="0" /></div>
-            <label class="checkline" style="align-self:end"><input id="noRest" type="checkbox" /> No aplica</label>
+            <div class="field">
+              <label>Cantidad de días</label
+              ><input id="restDays" type="number" min="0" step="1" value="0" />
+            </div>
+            <label class="checkline" style="align-self: end"
+              ><input id="noRest" type="checkbox" /> No aplica</label
+            >
           </div>
         </section>
 
         <div id="error" class="error"></div>
-        <div id="blockMsg" class="warning blocked hidden">🚫 No se puede continuar: la renuncia voluntaria solo genera prestación económica si se dio el preaviso por escrito al patrono. Cambie la respuesta a “Sí” para continuar.</div>
+        <div id="blockMsg" class="warning blocked hidden">
+          🚫 No se puede continuar: la renuncia voluntaria solo genera
+          prestación económica si se dio el preaviso por escrito al patrono.
+          Cambie la respuesta a “Sí” para continuar.
+        </div>
         <div class="actions no-print">
-          <button class="btn-primary" type="submit" id="calcBtn">Calcular</button>
-          <button class="btn-pdf" type="button" id="pdfBtn">Exportar PDF</button>
-          <button class="btn-sign" type="button" id="signBtn">Comprobante para firma</button>
+          <button class="btn-primary" type="submit" id="calcBtn">
+            Calcular
+          </button>
+          <button class="btn-pdf" type="button" id="pdfBtn">
+            Exportar PDF
+          </button>
+          <button class="btn-sign" type="button" id="signBtn">
+            Comprobante para firma
+          </button>
           <button class="btn-clear" type="button" id="clearBtn">Limpiar</button>
         </div>
-        <div id="dlBox" class="warning hidden" style="background:#eafbf6;border-color:#c9ebe3;color:#087b68"></div>
+        <div
+          id="dlBox"
+          class="warning hidden"
+          style="background: #eafbf6; border-color: #c9ebe3; color: #087b68"
+        ></div>
       </form>
 
       <section id="results" class="card results">
@@ -219,37 +758,72 @@
         <div class="results-body">
           <div id="caseInfo" class="info"></div>
           <div class="sect">Devengado</div>
-          <div class="result-row"><span>Vacación proporcional</span><b id="rVac"></b></div>
-          <div class="result-row"><span>Aguinaldo</span><b id="rBonus"></b></div>
-          <div class="result-row"><span>Indemnización / compensación</span><b id="rInd"></b></div>
-          <div class="result-row"><span id="lDay">Horas extras diurnas</span><b id="rDay"></b></div>
-          <div class="result-row"><span id="lNight">Horas extras nocturnas</span><b id="rNight"></b></div>
-          <div class="result-row"><span>Días de asueto laborados</span><b id="rHoliday"></b></div>
-          <div class="result-row"><span>Días de descanso semanal laborados</span><b id="rRest"></b></div>
-          <div class="total"><span><b>TOTAL DEVENGADO (BRUTO)</b></span><strong id="rTotal"></strong></div>
+          <div class="result-row">
+            <span>Vacación proporcional</span><b id="rVac"></b>
+          </div>
+          <div class="result-row">
+            <span>Aguinaldo</span><b id="rBonus"></b>
+          </div>
+          <div class="result-row">
+            <span>Indemnización / compensación</span><b id="rInd"></b>
+          </div>
+          <div class="result-row">
+            <span id="lDay">Horas extras diurnas</span><b id="rDay"></b>
+          </div>
+          <div class="result-row">
+            <span id="lNight">Horas extras nocturnas</span><b id="rNight"></b>
+          </div>
+          <div class="result-row">
+            <span>Días de asueto laborados</span><b id="rHoliday"></b>
+          </div>
+          <div class="result-row">
+            <span>Días de descanso semanal laborados</span><b id="rRest"></b>
+          </div>
+          <div class="total">
+            <span><b>TOTAL DEVENGADO (BRUTO)</b></span
+            ><strong id="rTotal"></strong>
+          </div>
           <div class="sect">Descuentos de ley</div>
-          <div class="result-row neg"><span>ISSS (3%, base máx. $1,000)</span><b id="rIsss"></b></div>
-          <div class="result-row neg"><span>AFP (7.25%)</span><b id="rAfp"></b></div>
-          <div class="result-row neg"><span>Impuesto sobre la Renta (ISR)</span><b id="rIsr"></b></div>
-          <div class="total net"><span><b>TOTAL NETO A RECIBIR</b></span><strong id="rNet"></strong></div>
-          <div id="formula" class="formula" style="margin-top:14px"></div>
-          <div class="warning">Cálculo estimado con fines académicos. No constituye un finiquito legal; en un caso real deben verificarse documentos, fechas y circunstancias ante las autoridades laborales.</div>
+          <div class="result-row neg">
+            <span>ISSS (3%, base máx. $1,000)</span><b id="rIsss"></b>
+          </div>
+          <div class="result-row neg">
+            <span>AFP (7.25%)</span><b id="rAfp"></b>
+          </div>
+          <div class="result-row neg">
+            <span>Impuesto sobre la Renta (ISR)</span><b id="rIsr"></b>
+          </div>
+          <div class="total net">
+            <span><b>TOTAL NETO A RECIBIR</b></span
+            ><strong id="rNet"></strong>
+          </div>
+          <div id="formula" class="formula" style="margin-top: 14px"></div>
+          <div class="warning">
+            Cálculo estimado con fines académicos. No constituye un finiquito
+            legal; en un caso real deben verificarse documentos, fechas y
+            circunstancias ante las autoridades laborales.
+          </div>
         </div>
       </section>
     </main>
 
     <footer class="footer">
       <div class="container">
-        <strong>Base legal:</strong> Código de Trabajo de El Salvador (Arts. 58, 161, 177, 190, 193, 196-202), Ley Reguladora de la Prestación Económica por Renuncia Voluntaria (Decreto 592), Ley del Seguro Social, Ley del Sistema de Ahorro para Pensiones y Ley de Impuesto sobre la Renta. Fuente: Ministerio de Trabajo y Previsión Social.
+        <strong>Base legal:</strong> Código de Trabajo de El Salvador (Arts. 58,
+        161, 177, 190, 193, 196-202), Ley Reguladora de la Prestación Económica
+        por Renuncia Voluntaria (Decreto 592), Ley del Seguro Social, Ley del
+        Sistema de Ahorro para Pensiones y Ley de Impuesto sobre la Renta.
+        Fuente: Ministerio de Trabajo y Previsión Social.
       </div>
     </footer>
 
     <script>
       const $ = (id) => document.getElementById(id);
       const money = (n) =>
-        new Intl.NumberFormat("es-SV", { style: "currency", currency: "USD" }).format(
-          Math.round((Number(n) || 0) * 100) / 100,
-        );
+        new Intl.NumberFormat("es-SV", {
+          style: "currency",
+          currency: "USD",
+        }).format(Math.round((Number(n) || 0) * 100) / 100);
       const MS = 86400000;
       const toDate = (v) => {
         if (!v) return null;
@@ -277,11 +851,13 @@
       function updateService() {
         const p = diffParts(toDate($("start").value), toDate($("end").value));
         if (!p) {
-          $("service").textContent = "Antigüedad total: — (completa las dos fechas)";
+          $("service").textContent =
+            "Antigüedad total: — (completa las dos fechas)";
           $("bonusDays").value = "";
           return;
         }
-        $("service").textContent = `Antigüedad total: ${p.y} años, ${p.m} meses y ${p.d} días`;
+        $("service").textContent =
+          `Antigüedad total: ${p.y} años, ${p.m} meses y ${p.d} días`;
         // Días de aguinaldo: años cumplidos al 12 de diciembre si la terminación es desde el 1 de octubre
         const end = toDate($("end").value),
           start = toDate($("start").value);
@@ -297,8 +873,21 @@
 
       /* ---------- Renuncia: bloqueo si no hubo preaviso ---------- */
       function checkBlock() {
-        const cause = document.querySelector('input[name="cause"]:checked').value;
+        const cause = document.querySelector(
+          'input[name="cause"]:checked',
+        ).value;
         $("renunciaExtra").classList.toggle("hidden", cause !== "renuncia");
+        // Despido injustificado: la fecha de finalización se fija en hoy y el calendario se bloquea
+        const endEl = $("end");
+        if (cause === "despido") {
+          const t = new Date();
+          endEl.value = `${t.getFullYear()}-${String(t.getMonth() + 1).padStart(2, "0")}-${String(t.getDate()).padStart(2, "0")}`;
+          endEl.disabled = true;
+        } else {
+          endEl.disabled = false;
+        }
+        $("endNote").classList.toggle("hidden", cause !== "despido");
+        updateService();
         const blocked = cause === "renuncia" && $("informed").value === "no";
         $("blockMsg").classList.toggle("hidden", !blocked);
         $("calcBtn").disabled = blocked;
@@ -306,7 +895,9 @@
         $("signBtn").disabled = blocked;
         return blocked;
       }
-      document.querySelectorAll('input[name="cause"]').forEach((r) => r.addEventListener("change", checkBlock));
+      document
+        .querySelectorAll('input[name="cause"]')
+        .forEach((r) => r.addEventListener("change", checkBlock));
       $("informed").addEventListener("change", checkBlock);
 
       /* ---------- Vacaciones / descanso ---------- */
@@ -341,7 +932,8 @@
         "Día principal de fiestas patronales del municipio",
       ];
       $("holidayList").innerHTML = HOLIDAYS.map(
-        (h) => `<label class="checkline"><input type="checkbox" class="hol"> ${h}</label>`,
+        (h) =>
+          `<label class="checkline"><input type="checkbox" class="hol"> ${h}</label>`,
       ).join("");
       const holCount = () => document.querySelectorAll(".hol:checked").length;
       $("holidayList").addEventListener("change", () => {
@@ -394,10 +986,14 @@
       function timeSel(c) {
         const hs =
           '<option value="">--</option>' +
-          Array.from({ length: 12 }, (_, i) => `<option value="${i + 1}">${i + 1}</option>`).join("");
+          Array.from(
+            { length: 12 },
+            (_, i) => `<option value="${i + 1}">${i + 1}</option>`,
+          ).join("");
         const ms = Array.from(
           { length: 60 },
-          (_, i) => `<option value="${i}">${String(i).padStart(2, "0")}</option>`,
+          (_, i) =>
+            `<option value="${i}">${String(i).padStart(2, "0")}</option>`,
         ).join("");
         return `<div class="tsel ${c}"><select class="th">${hs}</select><select class="tm">${ms}</select><select class="tp"><option value="AM">a. m.</option><option value="M">m. (mediodía)</option><option value="PM">p. m.</option></select></div>`;
       }
@@ -407,7 +1003,8 @@
           ap = el.querySelector(".tp").value;
         if (ap === "M") return "12:" + String(mv).padStart(2, "0");
         if (!hv) return "";
-        if (hv === "12" && ap === "PM") return "00:" + String(mv).padStart(2, "0"); // 12 de la noche = medianoche
+        if (hv === "12" && ap === "PM")
+          return "00:" + String(mv).padStart(2, "0"); // 12 de la noche = medianoche
         let hh = Number(hv) % 12;
         if (ap === "PM") hh += 12;
         return String(hh).padStart(2, "0") + ":" + String(mv).padStart(2, "0");
@@ -416,7 +1013,10 @@
         let day = 0,
           night = 0;
         document.querySelectorAll("#otRows tr").forEach((tr) => {
-          const r = splitHours(getT(tr.querySelector(".tStart")), getT(tr.querySelector(".tEnd")));
+          const r = splitHours(
+            getT(tr.querySelector(".tStart")),
+            getT(tr.querySelector(".tEnd")),
+          );
           tr.querySelector(".otClass").innerHTML =
             `Diurnas: <b>${r.day.toFixed(2)} h</b> · Nocturnas: <b>${r.night.toFixed(2)} h</b><br><span style="color:#68778a">${r.note}</span>`;
           const tot = r.day + r.night;
@@ -506,10 +1106,18 @@
           return fail(
             "Indica las fechas de las últimas vacaciones o marca “No ha tomado vacaciones en este período”.",
           );
-        if (!$("noVacation").checked && toDate($("vacStart").value) > toDate($("vacEnd").value))
-          return fail("El inicio de vacaciones no puede ser posterior a su finalización.");
+        if (
+          !$("noVacation").checked &&
+          toDate($("vacStart").value) > toDate($("vacEnd").value)
+        )
+          return fail(
+            "El inicio de vacaciones no puede ser posterior a su finalización.",
+          );
         const vacBase = new Date(vacStart.getTime() + MS);
-        const vacDays = Math.max(0, Math.min(365, Math.round((end - vacBase) / MS) + 1));
+        const vacDays = Math.max(
+          0,
+          Math.min(365, Math.round((end - vacBase) / MS) + 1),
+        );
         const vacation = (daily * 15 * 1.3 * vacDays) / 365;
 
         // Aguinaldo (CORRECCIÓN 3: años al 12 de diciembre cuando es completo)
@@ -541,16 +1149,21 @@
           indNote = "";
         if (cause === "despido") {
           const base = Math.min(daily, sectorDaily * 4);
-          ind = Math.max(base * 30 * p.y + (base / 360) * (p.m * 30 + p.d), base * 15);
+          ind = Math.max(
+            base * 30 * p.y + (base / 360) * (p.m * 30 + p.d),
+            base * 15,
+          );
           indNote =
             "Despido injustificado (Art. 58): 30 días por año y proporcional por fracción; tope de 4 salarios mínimos; mínimo 15 días.";
         } else {
           const base = Math.min(daily, sectorDaily * 2);
           if (p.days >= 720) {
             ind = base * 15 * p.y + (base / 360) * (p.m * 30 + p.d);
-            indNote = "Renuncia voluntaria: 15 días por año y proporcional por fracción; tope de 2 salarios mínimos.";
+            indNote =
+              "Renuncia voluntaria: 15 días por año y proporcional por fracción; tope de 2 salarios mínimos.";
           } else
-            indNote = "Renuncia voluntaria: no corresponde compensación porque no alcanza 2 años de servicio.";
+            indNote =
+              "Renuncia voluntaria: no corresponde compensación porque no alcanza 2 años de servicio.";
         }
 
         // Horas extras, asuetos y descanso
@@ -563,19 +1176,24 @@
         const rest = $("noRest").checked ? 0 : Number($("restDays").value) || 0;
         const restAmt = rest * daily * 1.5;
 
-        const total = vacation + bonus + ind + extraDay + extraNight + holidayAmt + restAmt;
+        const total =
+          vacation + bonus + ind + extraDay + extraNight + holidayAmt + restAmt;
 
         // Descuentos de ley
-        const salaryItems = vacation + extraDay + extraNight + holidayAmt + restAmt; // sujeto a ISSS/AFP
+        const salaryItems =
+          vacation + extraDay + extraNight + holidayAmt + restAmt; // sujeto a ISSS/AFP
         const isss = Math.min(salaryItems, 1000) * 0.03;
         const afp = salaryItems * 0.0725;
-        const taxable = Math.max(0, salaryItems - isss - afp) + Math.max(0, bonus - 1500); // indemnización exenta; aguinaldo exento hasta $1,500
+        const taxable =
+          Math.max(0, salaryItems - isss - afp) + Math.max(0, bonus - 1500); // indemnización exenta; aguinaldo exento hasta $1,500
         const isr = ISR(taxable);
         const net = total - isss - afp - isr;
 
         const set = (id, v) => ($(id).textContent = money(v));
-        $("lDay").textContent = `Horas extras diurnas (${hDay.toFixed(2)} h × ${money(hourly * 2)})`;
-        $("lNight").textContent = `Horas extras nocturnas (${hNight.toFixed(2)} h × ${money(hourly * 2.5)})`;
+        $("lDay").textContent =
+          `Horas extras diurnas (${hDay.toFixed(2)} h × ${money(hourly * 2)})`;
+        $("lNight").textContent =
+          `Horas extras nocturnas (${hNight.toFixed(2)} h × ${money(hourly * 2.5)})`;
         set("rVac", vacation);
         set("rBonus", bonus);
         set("rInd", ind);
@@ -626,7 +1244,13 @@
 
       /* ---------- Generador de PDF propio (sin librerías externas) ---------- */
       const WID = [
-        278,278,355,556,556,889,667,191,333,333,389,584,278,333,278,278,556,556,556,556,556,556,556,556,556,556,278,278,584,584,584,556,1015,667,667,722,722,667,611,778,722,278,500,667,556,833,722,778,667,778,722,667,611,722,667,944,667,667,611,278,278,278,469,556,333,556,556,500,556,556,278,556,556,222,222,500,222,833,556,556,556,556,333,500,278,556,500,722,500,500,500,334,260,334,584,
+        278, 278, 355, 556, 556, 889, 667, 191, 333, 333, 389, 584, 278, 333,
+        278, 278, 556, 556, 556, 556, 556, 556, 556, 556, 556, 556, 278, 278,
+        584, 584, 584, 556, 1015, 667, 667, 722, 722, 667, 611, 778, 722, 278,
+        500, 667, 556, 833, 722, 778, 667, 778, 722, 667, 611, 722, 667, 944,
+        667, 667, 611, 278, 278, 278, 469, 556, 333, 556, 556, 500, 556, 556,
+        278, 556, 556, 222, 222, 500, 222, 833, 556, 556, 556, 556, 333, 500,
+        278, 556, 500, 722, 500, 500, 500, 334, 260, 334, 584,
       ];
       class PDF {
         constructor() {
@@ -638,7 +1262,10 @@
           this.pages.push(this.cur);
         }
         esc(s) {
-          return s.replace(/\\/g, "\\\\").replace(/\(/g, "\\(").replace(/\)/g, "\\)");
+          return s
+            .replace(/\\/g, "\\\\")
+            .replace(/\(/g, "\\(")
+            .replace(/\)/g, "\\)");
         }
         w(s, size, bold) {
           let t = 0;
@@ -655,18 +1282,24 @@
           );
         }
         rect(x, y, w, hh, rgb) {
-          this.cur.push(`${rgb} rg ${x} ${(792 - y - hh).toFixed(2)} ${w} ${hh} re f`);
+          this.cur.push(
+            `${rgb} rg ${x} ${(792 - y - hh).toFixed(2)} ${w} ${hh} re f`,
+          );
         }
         line(x1, y1, x2, y2) {
-          this.cur.push(`0.6 0.65 0.7 RG 0.6 w ${x1} ${(792 - y1).toFixed(2)} m ${x2} ${(792 - y2).toFixed(2)} l S`);
+          this.cur.push(
+            `0.6 0.65 0.7 RG 0.6 w ${x1} ${(792 - y1).toFixed(2)} m ${x2} ${(792 - y2).toFixed(2)} l S`,
+          );
         }
         output() {
           const n = this.pages.length,
             o = [];
           o[1] = "<< /Type /Catalog /Pages 2 0 R >>";
           o[2] = `<< /Type /Pages /Kids [${this.pages.map((_, i) => 5 + 2 * i + " 0 R").join(" ")}] /Count ${n} >>`;
-          o[3] = "<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica /Encoding /WinAnsiEncoding >>";
-          o[4] = "<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica-Bold /Encoding /WinAnsiEncoding >>";
+          o[3] =
+            "<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica /Encoding /WinAnsiEncoding >>";
+          o[4] =
+            "<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica-Bold /Encoding /WinAnsiEncoding >>";
           this.pages.forEach((pg, i) => {
             const s = pg.join("\n");
             o[5 + 2 * i] =
@@ -682,7 +1315,10 @@
           const xr = out.length;
           out +=
             `xref\n0 ${o.length}\n0000000000 65535 f \n` +
-            off.slice(1).map((x) => String(x).padStart(10, "0") + " 00000 n \n").join("") +
+            off
+              .slice(1)
+              .map((x) => String(x).padStart(10, "0") + " 00000 n \n")
+              .join("") +
             `trailer\n<< /Size ${o.length} /Root 1 0 R >>\nstartxref\n${xr}\n%%EOF`;
           return Uint8Array.from(out, (c) => c.charCodeAt(0) & 255);
         }
@@ -731,12 +1367,24 @@
         };
         pdf.rect(0, 0, 612, 84, "0.063 0.165 0.263");
         pdf.text(
-          sign ? "COMPROBANTE DE LIQUIDACION PARA FIRMA" : "RESUMEN DE LIQUIDACION DE PRESTACIONES",
-          L, 42, 17, true, "left", "1 1 1",
+          sign
+            ? "COMPROBANTE DE LIQUIDACION PARA FIRMA"
+            : "RESUMEN DE LIQUIDACION DE PRESTACIONES",
+          L,
+          42,
+          17,
+          true,
+          "left",
+          "1 1 1",
         );
         pdf.text(
           "El Salvador - Calculo estimado segun Codigo de Trabajo y leyes de seguridad social",
-          L, 62, 9, false, "left", "0.85 0.92 0.97",
+          L,
+          62,
+          9,
+          false,
+          "left",
+          "0.85 0.92 0.97",
         );
         y = 112;
         const nm = $("name").value || "____________________",
@@ -744,29 +1392,58 @@
           jb = $("job").value || "____________________";
         para("Trabajador/a: " + nm, 11, true, 2);
         para("Cargo: " + jb + "   |   Patrono/Empresa: " + em, 10, false, 2);
-        para("Fecha de emision: " + new Date().toLocaleDateString("es-SV"), 10, false, 6);
+        para(
+          "Fecha de emision: " + new Date().toLocaleDateString("es-SV"),
+          10,
+          false,
+          6,
+        );
         $("caseInfo")
           .innerHTML.split(/<br\s*\/?>/i)
           .forEach((t) => para(t.replace(/<[^>]+>/g, ""), 9, false, 2));
         y += 4;
         document
-          .querySelectorAll("#results .results-body > .sect, #results .results-body > .result-row, #results .results-body > .total")
+          .querySelectorAll(
+            "#results .results-body > .sect, #results .results-body > .result-row, #results .results-body > .total",
+          )
           .forEach((el) => {
             need(34);
             if (el.classList.contains("sect")) {
               y += 8;
-              pdf.text(clean(el.textContent).toUpperCase(), L, y, 10, true, "left", "0.03 0.48 0.41");
+              pdf.text(
+                clean(el.textContent).toUpperCase(),
+                L,
+                y,
+                10,
+                true,
+                "left",
+                "0.03 0.48 0.41",
+              );
               y += 5;
               pdf.line(L, y, R, y);
               y += 15;
             } else if (el.classList.contains("result-row")) {
               pdf.text(clean(el.children[0].textContent), L, y, 10.5, false);
-              pdf.text(clean(el.children[1].textContent), R, y, 10.5, false, "right");
+              pdf.text(
+                clean(el.children[1].textContent),
+                R,
+                y,
+                10.5,
+                false,
+                "right",
+              );
               y += 17;
             } else {
               pdf.rect(L - 6, y - 14, R - L + 12, 24, "0.92 0.97 0.96");
               pdf.text(clean(el.children[0].textContent), L, y, 11.5, true);
-              pdf.text(clean(el.children[1].textContent), R, y, 11.5, true, "right");
+              pdf.text(
+                clean(el.children[1].textContent),
+                R,
+                y,
+                11.5,
+                true,
+                "right",
+              );
               y += 30;
             }
           });
@@ -774,9 +1451,14 @@
         if (sign) {
           need(200);
           para(
-            "Declaracion: Yo, " + nm + ", declaro haber recibido del patrono " + em +
+            "Declaracion: Yo, " +
+              nm +
+              ", declaro haber recibido del patrono " +
+              em +
               " las prestaciones detalladas en este comprobante, cuyo calculo he revisado. Este documento es un estimado con fines academicos y no sustituye el finiquito legal ni el acta ante el Ministerio de Trabajo y Prevision Social.",
-            9.5, false, 40,
+            9.5,
+            false,
+            40,
           );
           pdf.line(L, y, L + 210, y);
           pdf.line(R - 210, y, R, y);
@@ -790,7 +1472,12 @@
           pdf.text("DUI: ____________________", L, y, 10);
           pdf.text("Cargo: ____________________", R - 210, y, 10);
           y += 34;
-          pdf.text("Lugar y fecha: ______________________________________", L, y, 10);
+          pdf.text(
+            "Lugar y fecha: ______________________________________",
+            L,
+            y,
+            10,
+          );
         } else {
           need(80);
           $("formula")
@@ -799,13 +1486,17 @@
           y += 6;
           para(
             "Calculo estimado con fines academicos. No constituye un finiquito legal; en un caso real deben verificarse documentos, fechas y circunstancias ante las autoridades laborales.",
-            8, false, 0,
+            8,
+            false,
+            0,
           );
         }
         return pdf.output();
       }
       function deliver(bytes, name) {
-        const url = URL.createObjectURL(new Blob([bytes], { type: "application/pdf" }));
+        const url = URL.createObjectURL(
+          new Blob([bytes], { type: "application/pdf" }),
+        );
         const a = document.createElement("a");
         a.href = url;
         a.download = name;
@@ -857,10 +1548,12 @@
         $("vacEnd").disabled = false;
         $("restDays").disabled = false;
         $("bonusDays").value = "";
-        $("service").textContent = "Antigüedad total: — (completa las dos fechas)";
+        $("service").textContent =
+          "Antigüedad total: — (completa las dos fechas)";
         checkBlock();
         window.scrollTo({ top: 0, behavior: "smooth" });
       });
+      checkBlock(); // estado inicial (despido por defecto: fecha de finalización bloqueada)
     </script>
   </body>
 </html>
